@@ -6,7 +6,7 @@ const UserSchema = mongoose.Schema({
     name: {type: String , required: true},
     email: {type: String , required: true, unique: true},
     imageUrl: {type: String , required: true},
-    chartItems: {type: Object, required: true}
+    chartItems: {type: Object, default: {}}
 }, {timestamps: true , minimize: false})
 
 export const Users = mongoose.model.Users || mongoose.model("Users" , UserSchema)
