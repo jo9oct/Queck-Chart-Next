@@ -1,31 +1,26 @@
-
 import mongoose from "mongoose";
 
-let cached = global.mongoose
+let cached = global.mongoose;
 
-if(!cached){
-    cached = global.mongoose = {conn : null , Promise : null}
+if (!cached) {
+  cached = global.mongoose = { conn: null, promise: null };
 }
 
 async function ConnectDB() {
+  if (cached.conn) {
+    return cached.conn; // reuse existing connection
+  }
 
-    if(cached.conn){
-        return cached.conn
-    }
+  if (!cached.promise) {
+    const opts = { bufferCommands: false }; // ✅ correct key
 
-    if(!cached.Promise){
-        const opts = {
-            bufferCommand : false
-        }
+    cached.promise = mongoose
+      .connect(`${process.env.MONGODB_URI}/Quick-Chart`, opts)
+      .then((mongoose) => mongoose);
+  }
 
-        cached.Promise = mongoose.connect(`${process.env.MONGODB_URI}/Quick-Chart`,opts).then(mongoose => {
-            return mongoose
-        })
-    }
-
-    cached.conn = await cached.Promise
-    return cached.conn
-    
+  cached.conn = await cached.promise;
+  return cached.conn;
 }
 
-export default ConnectDB
+export default ConnectDB;
