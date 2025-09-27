@@ -1,7 +1,7 @@
 
 import { Inngest } from "inngest";
 import ConnectDB from "../config/db.js"
-import {User} from "../model/User.js"
+import {Users} from "../model/User.js"
 
 // Create a client to send and receive events
 export const inngest = new Inngest({ id: "QuickCart-Next" });
@@ -20,7 +20,7 @@ export const asyncUserCreation = inngest.createFunction(
       }
 
       await ConnectDB()
-      await User.create(UserData)
+      await Users.create(UserData)
     },
   );
 
@@ -38,7 +38,7 @@ export const asyncUserUpdate = inngest.createFunction(
       }
 
       await ConnectDB()
-      await User.findByIdAndUpdate(id,UserData)
+      await Users.findByIdAndUpdate(id,UserData)
     },
   );
 
@@ -49,6 +49,6 @@ export const asyncUserDelete = inngest.createFunction(
     async ({ event }) => {
       const {id} = event.data
       await ConnectDB()
-      await User.findByIdAndDelete(id)
+      await Users.findByIdAndDelete(id)
     },
   );
